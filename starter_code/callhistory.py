@@ -46,7 +46,7 @@ class CallHistory:
         # TODO CHECK OVER THIS HAVE NOT RUN TESTS YET
         month = call.time.month
         year = call.time.year
-        t = Tuple[month, year]
+        t = (month, year)
         exists = False
         for dates in self.outgoing_calls:
             # Don't know if this is correct syntax
@@ -63,7 +63,7 @@ class CallHistory:
         # TODO THIS IS THE SAME CODE AS ABOVE JUST CHANGED FOR INCOMING CALLS
         month = call.time.month
         year = call.time.year
-        t = Tuple[month, year]
+        t = (month, year)
         exists = False
         for dates in self.incoming_calls:
             # Don't know if this is correct syntax

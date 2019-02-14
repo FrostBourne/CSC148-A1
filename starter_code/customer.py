@@ -55,9 +55,9 @@ class Customer:
         # assuming that the number exists
         count = 0
         for i in self._phone_lines:
-            if i is call.src_number:
+            if i.number == call.src_number:
                 break
-            call += 1
+            count += 1
         self._phone_lines[count].make_call(call)
 
 
@@ -68,11 +68,14 @@ class Customer:
         Precondition: The phone line associated with the destination phone
         number of <call>, is owned by this customer
         """
+        # TODO: THERE SEEMS TO BE A PROBLEM
         count = 0
         for i in self._phone_lines:
-            if i is call.dst_number:
+            if i.number is call.dst_number:
                 break
-            call += 1
+            count += 1
+        if count >= len(self._phone_lines):
+            return
         self._phone_lines[count].receive_call(call)
 
 

@@ -48,7 +48,7 @@ class Contract:
          bill for this contract for the last month of call records loaded from
          the input dataset
     """
-    start: datetime.datetime
+    start: datetime.date
     bill: Optional[Bill]
 
     def __init__(self, start: datetime.date) -> None:

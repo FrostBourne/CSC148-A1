@@ -17,6 +17,8 @@ from typing import List, Dict
 from visualizer import Visualizer
 from customer import Customer
 from phoneline import PhoneLine
+# CAN WE IMPORT???
+from call import Call
 
 
 
@@ -121,18 +123,18 @@ def process_event_history(log: Dict[str, List[Dict]],
     # start recording the bills from this date
     # Note: uncomment the following lines when you're ready to implement this
     #
+
     # new_month(customer_list, billing_date.month, billing_date.year)
-    # TODO: I think there need to be some sort of thing that keeps track of
-    # TODO: Every month that passes and after every month a new_month has to be called
-    # TODO: I've done some bits of code below idk it it works or not but it should add call data
-    # TODO: To a customer that has made/received a call
+
     # ===========================================
     # NEW TODO I think this just requires us to implement a loop that creates
     # A new set of data every passing month
     for event_data in log['events']:
-        if type is 'call':
+        if event_data['type'] == 'call':
             call = Call(event_data['src_number'], event_data['dst_number'],
-                        event_data['time'], event['duration'],
+                        datetime.datetime.strptime(event_data['time'],
+                                                   "%Y-%m-%d %H:%M:%S"),
+                        event_data['duration'],
                         event_data['src_loc'], event_data['dst_loc'])
             src_cust = find_customer_by_number(event_data['src_number'],
                                                customer_list)
