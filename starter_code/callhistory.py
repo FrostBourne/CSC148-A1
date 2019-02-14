@@ -43,17 +43,17 @@ class CallHistory:
         # TODO check if that tuple exists if it does not add to dictionary
         # ToDo append call
 
-        # TODO Unsure how to extract month and year from call
-        # TODO Not sure if this code works
-        month = 1
-        year = 2
+        # TODO CHECK OVER THIS HAVE NOT RUN TESTS YET
+        month = call.time.month
+        year = call.time.year
+        t = Tuple[month, year]
         exists = False
         for dates in self.outgoing_calls:
             # Don't know if this is correct syntax
-            if dates is Tuple[month, year]:
+            if dates is t:
                 exists = True
         if exists is True:
-            self.outgoing_calls[Tuple[month, year]].append(call)
+            self.outgoing_calls[t].append(call)
 
 
 
@@ -61,15 +61,16 @@ class CallHistory:
         """ Register a Call <call> into this incoming call history
         """
         # TODO THIS IS THE SAME CODE AS ABOVE JUST CHANGED FOR INCOMING CALLS
-        month = 1
-        year = 2
+        month = call.time.month
+        year = call.time.year
+        t = Tuple[month, year]
         exists = False
         for dates in self.incoming_calls:
             # Don't know if this is correct syntax
-            if dates is Tuple[month, year]:
+            if dates is t:
                 exists = True
         if exists is True:
-            self.incoming_calls[Tuple[month, year]].append(call)
+            self.incoming_calls[t].append(call)
 
     # ----------------------------------------------------------
     # NOTE: You do not need to understand the implementation of

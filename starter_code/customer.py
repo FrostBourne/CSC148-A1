@@ -51,8 +51,15 @@ class Customer:
         Precondition: The phone line associated with the source phone number of
         <call>, is owned by this customer
         """
-        # TODO: Implement this method
-        pass
+        # count is to find index of number in list of numbers
+        # assuming that the number exists
+        count = 0
+        for i in self._phone_lines:
+            if i is call.src_number:
+                break
+            call += 1
+        self._phone_lines[count].make_call(call)
+
 
     def receive_call(self, call: Call) -> None:
         """ Record that a call was made to the destination phone number of
@@ -61,8 +68,13 @@ class Customer:
         Precondition: The phone line associated with the destination phone
         number of <call>, is owned by this customer
         """
-        # TODO: Implement this method
-        pass
+        count = 0
+        for i in self._phone_lines:
+            if i is call.dst_number:
+                break
+            call += 1
+        self._phone_lines[count].receive_call(call)
+
 
     def cancel_phone_line(self, number: str) -> Union[float, None]:
         """ Remove PhoneLine with number <number> from this customer and return
