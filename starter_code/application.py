@@ -122,14 +122,26 @@ def process_event_history(log: Dict[str, List[Dict]],
 
     # start recording the bills from this date
     # Note: uncomment the following lines when you're ready to implement this
-    #
+    # TODO: CANT SEEM TO THE THE BELOW LINE TO WORK
+    # TODO: COULD BE DUE THE NOT IMPLEMENTING CONTRACTS YET
 
     # new_month(customer_list, billing_date.month, billing_date.year)
 
     # ===========================================
     # NEW TODO I think this just requires us to implement a loop that creates
+    # TODO: ABOVE COULD BE FIXED NOW IDK
     # A new set of data every passing month
     for event_data in log['events']:
+        # Checks if a new billing month needs to be made
+        # calltime = datetime.datetime.strptime(event_data['time'],
+        #                                            "%Y-%m-%d %H:%M:%S")
+        # if calltime.month > billing_month and calltime.day > billing_date.day:
+        #     billing_month = calltime.month
+        #     billing_date = calltime
+        #     new_month(customer_list, billing_date.month, billing_date.year)
+
+    # TODO I HAVENT FULLY TRACED THIS CODE BACK YET BUT IT SEEMS UNABLE TO
+    # TODO: REGISTER ANY CALLS INTO CUSTOMERS
         if event_data['type'] == 'call':
             call = Call(event_data['src_number'], event_data['dst_number'],
                         datetime.datetime.strptime(event_data['time'],

@@ -38,10 +38,6 @@ class CallHistory:
     def register_outgoing_call(self, call: Call) -> None:
         """ Register a Call <call> into this outgoing call history
         """
-        # TODO PROCESS:
-        # TODO find call month/year
-        # TODO check if that tuple exists if it does not add to dictionary
-        # ToDo append call
 
         # TODO CHECK OVER THIS HAVE NOT RUN TESTS YET
         month = call.time.month
