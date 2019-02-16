@@ -21,7 +21,6 @@ from phoneline import PhoneLine
 from call import Call
 
 
-
 def import_data() -> Dict[str, List[Dict]]:
     """ Open the file <dataset.json> which stores the json data, and return
     a dictionary that stores this data in a format as described in the A1
@@ -114,34 +113,31 @@ def process_event_history(log: Dict[str, List[Dict]],
     handout.
     - The <customer_list> already contains all the customers from the <log>.
     """
-    # TODO: Implement this method. We are giving you the first few lines of code
     billing_date = datetime.datetime.strptime(log['events'][0]['time'],
                                               "%Y-%m-%d %H:%M:%S")
     billing_month = billing_date.month
 
-
     # start recording the bills from this date
     # Note: uncomment the following lines when you're ready to implement this
-    # TODO: CANT SEEM TO THE THE BELOW LINE TO WORK
-    # TODO: COULD BE DUE THE NOT IMPLEMENTING CONTRACTS YET
 
     # new_month(customer_list, billing_date.month, billing_date.year)
 
     # ===========================================
-    # NEW TODO I think this just requires us to implement a loop that creates
+    # TODO I think this just requires us to implement a loop that creates
     # TODO: ABOVE COULD BE FIXED NOW IDK
     # A new set of data every passing month
     for event_data in log['events']:
         # Checks if a new billing month needs to be made
-        # calltime = datetime.datetime.strptime(event_data['time'],
-        #                                            "%Y-%m-%d %H:%M:%S")
-        # if calltime.month > billing_month and calltime.day > billing_date.day:
-        #     billing_month = calltime.month
-        #     billing_date = calltime
+        calltime = datetime.datetime.strptime(event_data['time'],
+                                              "%Y-%m-%d %H:%M:%S")
+
+        if calltime.month > billing_month and calltime.day > billing_date.day:
+            billing_month = calltime.month
+            billing_date = calltime
         #     new_month(customer_list, billing_date.month, billing_date.year)
 
-    # TODO I HAVENT FULLY TRACED THIS CODE BACK YET BUT IT SEEMS UNABLE TO
-    # TODO: REGISTER ANY CALLS INTO CUSTOMERS
+        # TODO I HAVENT FULLY TRACED THIS CODE BACK YET BUT IT SEEMS UNABLE TO
+        # TODO: REGISTER ANY CALLS INTO CUSTOMERS
         if event_data['type'] == 'call':
             call = Call(event_data['src_number'], event_data['dst_number'],
                         datetime.datetime.strptime(event_data['time'],
@@ -154,10 +150,6 @@ def process_event_history(log: Dict[str, List[Dict]],
                                                customer_list)
             src_cust.make_call(call)
             dst_cust.receive_call(call)
-
-
-
-
 
 
 if __name__ == '__main__':

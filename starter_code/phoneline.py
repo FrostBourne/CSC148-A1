@@ -69,7 +69,6 @@ class PhoneLine:
         # TODO THIS SHOULD JUST BE TO CALL ON THE METHOD
         self.callhistory.register_outgoing_call(call)
 
-
     def receive_call(self, call: Call) -> None:
         """ Add the <call> to this phone line's callhistory.
         Incoming calls are not billed under any contract.
