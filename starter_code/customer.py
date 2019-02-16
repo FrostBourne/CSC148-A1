@@ -53,13 +53,16 @@ class Customer:
         """
         # count is to find index of number in list of numbers
         # assuming that the number exists
-        count = 0
-        for i in self._phone_lines:
-            if i.number == call.src_number:
-                break
-            count += 1
-        self._phone_lines[count].make_call(call)
+        if len(self._phone_lines) != 0:
+            found = False
+            count = 0
 
+            while count < len(self._phone_lines) and not found:
+                if self._phone_lines[count].number == call.src_number:
+                    found = True
+                count += 1
+
+            self._phone_lines[count-1].make_call(call)
 
     def receive_call(self, call: Call) -> None:
         """ Record that a call was made to the destination phone number of
@@ -68,16 +71,16 @@ class Customer:
         Precondition: The phone line associated with the destination phone
         number of <call>, is owned by this customer
         """
-        # TODO: THERE SEEMS TO BE A PROBLEM
-        count = 0
-        for i in self._phone_lines:
-            if i.number is call.dst_number:
-                break
-            count += 1
-        if count >= len(self._phone_lines):
-            return
-        self._phone_lines[count].receive_call(call)
+        if len(self._phone_lines) != 0:
+            count = 0
+            found = False
 
+            while count < len(self._phone_lines) and not found:
+                if self._phone_lines[count].number == call.dst_number:
+                    found = True
+                count += 1
+
+            self._phone_lines[count-1].receive_call(call)
 
     def cancel_phone_line(self, number: str) -> Union[float, None]:
         """ Remove PhoneLine with number <number> from this customer and return
