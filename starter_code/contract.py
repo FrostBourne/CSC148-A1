@@ -227,13 +227,13 @@ class PrepaidContract(Contract):
     """
     start: datetime.date
     bill: Optional[Bill]
-    credit: float
+    balance: float
 
     def __init__(self, start: datetime.date, credit: float) -> None:
         """ Create a new Contract with the <start> date, starts as inactive
         """
         Contract.__init__(self, start)
-        self.credit = credit
+        self.balance = credit
 
     def new_month(self, month: int, year: int, bill: Bill) -> None:
         """ Advance to a new month in the contract, corresponding to <month> and
@@ -252,7 +252,8 @@ class PrepaidContract(Contract):
         was made. In other words, you can safely assume that self.bill has been
         already advanced to the right month+year.
         """
-        self.bill.add_billed_minutes(ceil(call.duration / 60.0))
+        time = ceil(call.duration / 60.0)
+        self.balance = time * PREPAID_MINS_COST
 
     def cancel_contract(self) -> float:
         """ Return the amount owed in order to close the phone line associated
@@ -264,7 +265,10 @@ class PrepaidContract(Contract):
         exists for the right month+year when the cancellation is requested.
         """
         self.start = None
-        return self.bill.get_cost()
+        if self.balance > 0:
+            return self.ba
+        else:
+            return 0
 # TODO: Implement the MTMContract, TermContract, and PrepaidContract
 
 
