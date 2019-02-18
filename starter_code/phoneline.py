@@ -66,17 +66,20 @@ class PhoneLine:
         If there is no bill for the current monthly billing cycle, then a new
         month must be <started> by advancing to the right month from <call>.
         """
-        # TODO THIS SHOULD JUST BE TO CALL ON THE METHOD
         self.callhistory.register_outgoing_call(call)
 
         month = call.time.month
         year = call.time.year
         t = (month, year)
 
+        # check if in bills
         if t not in self.bills.keys():
+            # start new month
             self.new_month(month, year)
+            # bill call
             self.contract.bill_call(call)
         else:
+            # bill call
             self.contract.bill_call(call)
 
     def receive_call(self, call: Call) -> None:
@@ -86,14 +89,16 @@ class PhoneLine:
         then a new month must be <started> by advancing to the right month from
         <call>.
         """
-        # TODO this should be ok
+
         self.callhistory.register_incoming_call(call)
 
         month = call.time.month
         year = call.time.year
         t = (month, year)
 
+        # check if in bills
         if t not in self.bills.keys():
+            # start new month
             self.new_month(month, year)
 
     def cancel_line(self) -> float:
