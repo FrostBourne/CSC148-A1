@@ -102,8 +102,20 @@ class CustomerFilter(Filter):
         - If the filter string is invalid, your code must not crash, as
         specified in the handout.
         """
-        # TODO: Implement this method
-        return data
+        found = False
+        filtered_calls = []
+
+        #TODO Fix this resetting other filters
+        for c in customers:
+            if filter_string == str(c.get_id()):
+                found = True
+                cust_calls = c.get_history()
+                filtered_calls.extend(cust_calls[0])
+
+        if found is False:
+            return data
+        else:
+            return filtered_calls
 
     def __str__(self) -> str:
         """ Return a description of this filter to be displayed in the UI menu
@@ -132,8 +144,30 @@ class DurationFilter(Filter):
         - If the filter string is invalid, your code must not crash, as
         specified in the handout.
         """
-        # TODO: Implement this method
-        return data
+        filtered_calls = []
+        try:
+            if filter_string == "":
+                return data
+
+            if filter_string[0] == 'G':
+                s = int(filter_string[1:])
+                for c in data:
+                    if c.duration > s:
+                        filtered_calls.append(c)
+
+            elif filter_string[0] == 'L':
+                s = int(filter_string[1:])
+                for c in data:
+                    if c.duration < s:
+                        filtered_calls.append(c)
+
+            else:
+                return data
+
+            return filtered_calls
+
+        except ValueError:
+            return data
 
     def __str__(self) -> str:
         """ Return a description of this filter to be displayed in the UI menu
@@ -170,8 +204,26 @@ class LocationFilter(Filter):
         - If the filter string is invalid, your code must not crash, as
         specified in the handout.
         """
-        # TODO: Implement this method
-        return data
+        filtered_calls = []
+        try:
+            if filter_string == "":
+                return data
+
+            coord = filter_string.split(", ")
+            if len(coord) != 4:
+                return data
+
+            for c in data:
+                if (float(coord[0]) < c.src_loc[0]) and (float(coord[1]) <
+                                                         c.src_loc[1]):
+                    if (float(coord[2]) > c.src_loc[0]) and (float(coord[3]) >
+                                                             c.src_loc[1]):
+                        filtered_calls.append(c)
+
+            return filtered_calls
+
+        except ValueError:
+            return data
 
     def __str__(self) -> str:
         """ Return a description of this filter to be displayed in the UI menu
