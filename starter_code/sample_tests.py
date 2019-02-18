@@ -3,7 +3,7 @@ CSC148, Winter 2019
 Assignment 1
 
 This is a revised version of the sample test module that includes
-two corrections: 
+two corrections:
 (1) Expected bill totals are now correctly based on
 the proper use of minutes and seconds, as described on Piazza:
 https://piazza.com/class/jpuk89lzot57ez?cid=536

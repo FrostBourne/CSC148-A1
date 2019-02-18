@@ -106,6 +106,10 @@ class CustomerFilter(Filter):
         filtered_calls = []
 
         #TODO Fix this resetting other filters
+        found = False
+        filtered_calls = []
+        r_calls = []
+
         for c in customers:
             if filter_string == str(c.get_id()):
                 found = True
@@ -115,7 +119,11 @@ class CustomerFilter(Filter):
         if found is False:
             return data
         else:
-            return filtered_calls
+            for c in filtered_calls:
+                if c in data:
+                    r_calls.append(c)
+
+            return r_calls
 
     def __str__(self) -> str:
         """ Return a description of this filter to be displayed in the UI menu

@@ -68,7 +68,7 @@ class CallHistory:
         if exists:
             self.incoming_calls[t].append(call)
         else:
-            self.outgoing_calls[t] = [call]
+            self.incoming_calls[t] = [call]
 
     # ----------------------------------------------------------
     # NOTE: You do not need to understand the implementation of
