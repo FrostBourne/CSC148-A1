@@ -102,23 +102,24 @@ class CustomerFilter(Filter):
         - If the filter string is invalid, your code must not crash, as
         specified in the handout.
         """
-        found = False
-        filtered_calls = []
-
-        #TODO Fix this resetting other filters
+        # Returns and checks
         found = False
         filtered_calls = []
         r_calls = []
 
+        # Looping through customers
         for c in customers:
+            # Compares ids
             if filter_string == str(c.get_id()):
                 found = True
                 cust_calls = c.get_history()
+                # only take outgoing calls, we don't want to include calls twice
                 filtered_calls.extend(cust_calls[0])
 
         if found is False:
             return data
         else:
+            # Checks if filtered_calls are in dataset
             for c in filtered_calls:
                 if c in data:
                     r_calls.append(c)
@@ -152,28 +153,34 @@ class DurationFilter(Filter):
         - If the filter string is invalid, your code must not crash, as
         specified in the handout.
         """
+        # Creating empty list to return
         filtered_calls = []
         try:
+            # Check if empty string
             if filter_string == "":
                 return data
 
+            # Check if string starts with 'G'
             if filter_string[0] == 'G':
                 s = int(filter_string[1:])
                 for c in data:
                     if c.duration > s:
                         filtered_calls.append(c)
 
+            # Check if string starts with 'L'
             elif filter_string[0] == 'L':
                 s = int(filter_string[1:])
                 for c in data:
                     if c.duration < s:
                         filtered_calls.append(c)
 
+            # If string doesn't meet our criteria
             else:
                 return data
 
             return filtered_calls
 
+        # If invalid input
         except ValueError:
             return data
 
@@ -214,13 +221,16 @@ class LocationFilter(Filter):
         """
         filtered_calls = []
         try:
+            # If empty
             if filter_string == "":
                 return data
 
             coord = filter_string.split(", ")
+            # If an invalid amount of coordinates are given
             if len(coord) != 4:
                 return data
 
+            # Loop through data
             for c in data:
                 if (float(coord[0]) < c.src_loc[0]) and (float(coord[1]) <
                                                          c.src_loc[1]):
@@ -230,6 +240,7 @@ class LocationFilter(Filter):
 
             return filtered_calls
 
+        # If invalid input
         except ValueError:
             return data
 

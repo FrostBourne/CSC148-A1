@@ -38,16 +38,16 @@ class CallHistory:
     def register_outgoing_call(self, call: Call) -> None:
         """ Register a Call <call> into this outgoing call history
         """
-
-        # TODO CHECK OVER THIS HAVE NOT RUN TESTS YET
         month = call.time.month
         year = call.time.year
         t = (month, year)
         exists = False
 
+        # Checking if time is in dict
         if t in self.outgoing_calls.keys():
             exists = True
 
+        # Add calls to outgoing calls
         if exists:
             self.outgoing_calls[t].append(call)
         else:
@@ -56,15 +56,16 @@ class CallHistory:
     def register_incoming_call(self, call: Call) -> None:
         """ Register a Call <call> into this incoming call history
         """
-        # TODO THIS IS THE SAME CODE AS ABOVE JUST CHANGED FOR INCOMING CALLS
         month = call.time.month
         year = call.time.year
         t = (month, year)
         exists = False
 
+        # Checking if time is in dict
         if t in self.incoming_calls.keys():
             exists = True
 
+        # Add calls to incoming calls
         if exists:
             self.incoming_calls[t].append(call)
         else:
