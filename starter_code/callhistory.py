@@ -50,6 +50,8 @@ class CallHistory:
 
         if exists:
             self.outgoing_calls[t].append(call)
+        else:
+            self.outgoing_calls[t] = [call]
 
     def register_incoming_call(self, call: Call) -> None:
         """ Register a Call <call> into this incoming call history
@@ -65,6 +67,8 @@ class CallHistory:
 
         if exists:
             self.incoming_calls[t].append(call)
+        else:
+            self.outgoing_calls[t] = [call]
 
     # ----------------------------------------------------------
     # NOTE: You do not need to understand the implementation of

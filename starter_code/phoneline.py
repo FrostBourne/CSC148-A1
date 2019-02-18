@@ -69,15 +69,15 @@ class PhoneLine:
         # TODO THIS SHOULD JUST BE TO CALL ON THE METHOD
         self.callhistory.register_outgoing_call(call)
 
-        """
         month = call.time.month
         year = call.time.year
         t = (month, year)
 
         if t not in self.bills.keys():
-            self.bills[t] = Bill()
+            self.new_month(month, year)
+            self.contract.bill_call(call)
         else:
-            self.contract.bill_call(call)"""
+            self.contract.bill_call(call)
 
     def receive_call(self, call: Call) -> None:
         """ Add the <call> to this phone line's callhistory.
@@ -89,13 +89,12 @@ class PhoneLine:
         # TODO this should be ok
         self.callhistory.register_incoming_call(call)
 
-        """
         month = call.time.month
         year = call.time.year
         t = (month, year)
 
         if t not in self.bills.keys():
-            self.new_month(month, year)"""
+            self.new_month(month, year)
 
     def cancel_line(self) -> float:
         """ Cancel this line's contract and return the outstanding bill amount
