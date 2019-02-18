@@ -87,6 +87,7 @@ class Contract:
         self.start = None
         return self.bill.get_cost()
 
+
 # TODO: I DONT KNOW IF THIS IS CORRECT OR NOT
 # TODO: ALSO GOTTA CHANGE DOCSTRINGS ILL PROB DO IT LATER
 class TermConctract(Contract):
@@ -211,7 +212,7 @@ class MTMContract(Contract):
         self.start = None
         return self.bill.get_cost()
 
-# TODO: NOTHING FOR PREPAID EXCEPT MAYBE __INIT__ IS DONE
+
 class PrepaidContract(Contract):
     """ A Term contract for a phone line
 
@@ -234,13 +235,14 @@ class PrepaidContract(Contract):
         Contract.__init__(self, start)
         self.credit = credit
 
-    # TODO: NOTHING BELOW THIS IS DONE
     def new_month(self, month: int, year: int, bill: Bill) -> None:
         """ Advance to a new month in the contract, corresponding to <month> and
         <year>. This may be the first month of the contract.
         Store the <bill> argument in this contract and set the appropriate rate
         per minute and fixed cost.
         """
+        bill.set_rates('prepaid', PREPAID_MINS_COST)
+        self.bill = bill
 
     def bill_call(self, call: Call) -> None:
         """ Add the <call> to the bill.
@@ -259,7 +261,7 @@ class PrepaidContract(Contract):
         Precondition:
         - a bill has already been created for the month+year when this contract
         is being cancelled. In other words, you can safely assume that self.bill
-        exists for the right month+year when the cancelation is requested.
+        exists for the right month+year when the cancellation is requested.
         """
         self.start = None
         return self.bill.get_cost()

@@ -56,7 +56,7 @@ class PhoneLine:
         If the new month+year does not already exist in the <bills> attribute,
         create a new bill.
         """
-        if (month, year) not in self.bills:
+        if (month, year) not in self.bills.keys():
             self.bills[(month, year)] = Bill()
             self.contract.new_month(month, year, self.bills[(month, year)])
 
@@ -69,6 +69,16 @@ class PhoneLine:
         # TODO THIS SHOULD JUST BE TO CALL ON THE METHOD
         self.callhistory.register_outgoing_call(call)
 
+        """
+        month = call.time.month
+        year = call.time.year
+        t = (month, year)
+
+        if t not in self.bills.keys():
+            self.bills[t] = Bill()
+        else:
+            self.contract.bill_call(call)"""
+
     def receive_call(self, call: Call) -> None:
         """ Add the <call> to this phone line's callhistory.
         Incoming calls are not billed under any contract.
@@ -79,6 +89,13 @@ class PhoneLine:
         # TODO this should be ok
         self.callhistory.register_incoming_call(call)
 
+        """
+        month = call.time.month
+        year = call.time.year
+        t = (month, year)
+
+        if t not in self.bills.keys():
+            self.new_month(month, year)"""
 
     def cancel_line(self) -> float:
         """ Cancel this line's contract and return the outstanding bill amount
