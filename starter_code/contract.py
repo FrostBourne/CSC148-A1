@@ -90,7 +90,7 @@ class Contract:
 
 # TODO: I DONT KNOW IF THIS IS CORRECT OR NOT
 # TODO: ALSO GOTTA CHANGE DOCSTRINGS ILL PROB DO IT LATER
-class TermConctract(Contract):
+class TermContract(Contract):
     """ A Term contract for a phone line
 
     === Public Attributes ===
@@ -233,7 +233,7 @@ class PrepaidContract(Contract):
         """ Create a new Contract with the <start> date, starts as inactive
         """
         Contract.__init__(self, start)
-        self.credit = credit
+        self.credit = -credit
 
     def new_month(self, month: int, year: int, bill: Bill) -> None:
         """ Advance to a new month in the contract, corresponding to <month> and
@@ -242,6 +242,8 @@ class PrepaidContract(Contract):
         per minute and fixed cost.
         """
         bill.set_rates('prepaid', PREPAID_MINS_COST)
+        if self.credit > -10:
+            bill.add_fixed_cost(25)
         self.bill = bill
 
     def bill_call(self, call: Call) -> None:
@@ -252,7 +254,8 @@ class PrepaidContract(Contract):
         was made. In other words, you can safely assume that self.bill has been
         already advanced to the right month+year.
         """
-        self.bill.add_billed_minutes(ceil(call.duration / 60.0))
+        time = ceil(call.duration / 60.0)
+        self.credit += time * PREPAID_MINS_COST
 
     def cancel_contract(self) -> float:
         """ Return the amount owed in order to close the phone line associated
@@ -264,8 +267,10 @@ class PrepaidContract(Contract):
         exists for the right month+year when the cancellation is requested.
         """
         self.start = None
-        return self.bill.get_cost()
-# TODO: Implement the MTMContract, TermContract, and PrepaidContract
+        if self.credit > 0:
+            return self.credit
+        else:
+            return 0
 
 
 if __name__ == '__main__':
