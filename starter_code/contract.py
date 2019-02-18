@@ -118,8 +118,11 @@ class TermContract(Contract):
         Store the <bill> argument in this contract and set the appropriate rate
         per minute and fixed cost.
         """
+        # keeps track of the given month for when customer wants to cancel
         self.current = date(year, month, 25)
+        # creates bill with cost per min call
         bill.set_rates('term', TERM_MINS_COST)
+        # checks if its the first month of the contract
         if month == self.start.month and year == self.start.year:
             bill.add_fixed_cost(TERM_MONTHLY_FEE + TERM_DEPOSIT)
         else:
@@ -134,13 +137,16 @@ class TermContract(Contract):
         was made. In other words, you can safely assume that self.bill has been
         already advanced to the right month+year.
         """
+        # checks if customer has enough free minutes to make the call
         if self.bill.free_min < TERM_MINS:
             if self.bill.free_min + ceil(call.duration / 60.0) < TERM_MINS:
                 self.bill.add_free_minutes(ceil(call.duration / 60.0))
+            # customer does not have enough minutes so the must be charged for
+            # minutes they do not have free
             else:
-                min = self.bill.free_min + ceil(call.duration / 60.0)\
+                mins = self.bill.free_min + ceil(call.duration / 60.0)\
                       - TERM_MINS
-                self.bill.add_free_minutes(ceil(call.duration / 60.0) - min)
+                self.bill.add_free_minutes(ceil(call.duration / 60.0) - mins)
                 self.bill.add_billed_minutes(min)
         else:
             self.bill.add_billed_minutes(ceil(call.duration / 60.0))
@@ -156,6 +162,7 @@ class TermContract(Contract):
         """
         self.start = None
         if self.current > self.end:
+            # customer gets term deposit back
             return self.bill.get_cost() - TERM_DEPOSIT
         else:
             return self.bill.get_cost()
@@ -235,7 +242,15 @@ class PrepaidContract(Contract):
         self.balance = -balance
 
     def new_month(self, month: int, year: int, bill: Bill) -> None:
+        """ Advance to a new month in the contract, corresponding to <month> and
+        <year>. This may be the first month of the contract.
+        Store the <bill> argument in this contract and set the appropriate rate
+        per minute and fixed cost. Fixed cost of the new months bill is
+        the balance of the last months bill with top up if balance has less than
+        10 credit
+        """
         bill.set_rates('prepaid', PREPAID_MINS_COST)
+        # customer needs to top up
         if self.balance > -10:
             bill.add_fixed_cost(self.balance - 25)
         else:
@@ -243,12 +258,27 @@ class PrepaidContract(Contract):
         self.bill = bill
 
     def bill_call(self, call: Call) -> None:
+        """ Add the <call> to the bill.
+
+        Precondition:
+        - a bill has already been created for the month+year when the <call>
+        was made. In other words, you can safely assume that self.bill has been
+        already advanced to the right month+year.
+        """
         time = ceil(call.duration / 60.0)
         self.balance += time * PREPAID_MINS_COST
         self.bill.add_billed_minutes(ceil(call.duration / 60.0))
 
 
     def cancel_contract(self) -> float:
+        """ Return the amount owed in order to close the phone line associated
+        with this contract.
+
+        Precondition:
+        - a bill has already been created for the month+year when this contract
+        is being cancelled. In other words, you can safely assume that self.bill
+        exists for the right month+year when the cancelation is requested.
+        """
         self.start = None
         if self.balance > 0:
             return self.balance

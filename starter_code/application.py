@@ -112,37 +112,36 @@ def process_event_history(log: Dict[str, List[Dict]],
     billing_month = billing_date.month
 
     # start recording the bills from this date
-    # Note: uncomment the following lines when you're ready to implement this
 
     new_month(customer_list, billing_date.month, billing_date.year)
 
-    # ===========================================
-    # TODO I think this just requires us to implement a loop that creates
-    # TODO: ABOVE COULD BE FIXED NOW IDK
     # A new set of data every passing month
     for event_data in log['events']:
         # Checks if a new billing month needs to be made
         calltime = datetime.datetime.strptime(event_data['time'],
                                               "%Y-%m-%d %H:%M:%S")
-
+        # If new month is detected will advance all customers into a new month
         if calltime.month > billing_month and calltime.day > billing_date.day:
             billing_month = calltime.month
             billing_date = calltime
             new_month(customer_list, billing_date.month, billing_date.year)
 
-        # TODO I HAVEN'T FULLY TRACED THIS CODE BACK YET BUT IT SEEMS UNABLE TO
-        # TODO: REGISTER ANY CALLS INTO CUSTOMERS
 
+        # Checks if event type is a call
         if event_data['type'] == 'call':
+            # Create call with data
             call = Call(event_data['src_number'], event_data['dst_number'],
                         datetime.datetime.strptime(event_data['time'],
                                                    "%Y-%m-%d %H:%M:%S"),
                         event_data['duration'],
                         event_data['src_loc'], event_data['dst_loc'])
+            # Finds customer that made the call
             src_cust = find_customer_by_number(event_data['src_number'],
                                                customer_list)
+            # Finds customer that received the call
             dst_cust = find_customer_by_number(event_data['dst_number'],
                                                customer_list)
+            # Registers calls into the customers history
             src_cust.make_call(call)
             dst_cust.receive_call(call)
 
